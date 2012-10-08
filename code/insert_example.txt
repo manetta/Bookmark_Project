@@ -1,0 +1,38 @@
+use bookmarks;
+
+insert into users(username,password,email,user_type) values
+('manetta','7110eda4d09e062aa5e4a390b0a572ac0d2c0220','nikol@hotmail.com', 'A'),
+('vassis','7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'vassis@ceid.upatras.gr','A'),
+('katia','84eefabb7471365baee942d7773e725cff9e5c4a','kataia@hotmail.com','U'), 		/*password=2356d*/
+('antonis','85f741f5279253f780c1f1235ff91f807e7df2dc','ant123@yahoo.com','U'),		/*password=ant1234*/
+('nikol','7110eda4d09e062aa5e4a390b0a572ac0d2c0220','nikol@gmail.com','U'),
+('georgia','675cbb1bfb62db495dd123d3206ab710b21b2795','georgia@gmail.com','U');   	/*password=geopan*/
+
+insert into bookmark(bookmark_id,title,url,description,user_id) values
+(1,'mixani anazitisis google','www.google.gr','mixani anazitisis google','nikol'),
+(2,'mixani anazitisis yahoo','www.yahoo.gr','mixani anazitisis yahoo','antonis'),
+(3,'radiofwno sfera','www.sfera.gr','radiofwno sfera','nikol'),
+(4,'ceid','www.ceid.upatras.gr','sxoli mixanikwn hy k pliroforikis','nikol'),
+(5,'ote','www.ote.gr','etairia tilepikoinwniwn ote','nikol');
+
+insert into tags(tag_id,bkmark_id,tag) values
+(1,1,'mixani'),
+(2,1,'anazitisis'),
+(3,1,'google'),
+(4,2,'mixani'),
+(5,2,'anazitisis'),
+(6,2,'yahoo'),
+(7,3,'radiofwno'),
+(8,3,'sfera'),
+(9,4,'ceid'),
+(10,4,'ote');
+
+insert into autocomplete(val) values
+('mixani'),
+('anazitisis'),
+('google'),
+('yahoo'),
+('radiofwno'),
+('sfera'),
+('ceid'),
+('ote');

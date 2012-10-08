@@ -1,0 +1,142 @@
+drop DATABASE if exists bookmarks;
+create DATABASE bookmarks;
+use bookmarks;
+
+create table `users`
+(
+	`username` char(20) not null default '',
+	`password` char(16) not null default '',
+	`email` char(25) not null default '',
+	`user_type` enum('admin','user') not null,
+	UNIQUE(`username`),
+	PRIMARY KEY(`username`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table `bookmark`
+(
+	`bookmark_id` int not null auto_increment,
+	`title` char(100) default '',
+	`url` text not null,
+	`description` text default '',
+	`views` int(10) default '0',
+	`modified` timestamp default current_timestamp,
+	`user_id` char(20) not null,
+	PRIMARY KEY(`bookmark_id`),
+	CONSTRAINT `bookmarkcnst`
+	FOREIGN KEY(`user_id`) 
+	REFERENCES `users`(`username`)
+	ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table `tags`
+(
+	`tag_id` int not null auto_increment,
+	`bkmark_id` int not null,
+	PRIMARY KEY(`tag_id`,`bkmark_id`),
+	CONSTRAINT `tagcnst`
+	FOREIGN KEY(`bkmark_id`)
+	REFERENCES `bookmark`(`bookmark_id`)
+	ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
+
+create table marks
+(
+	`mark_id` int not null auto_increment,
+	`mark` tinyint default '0',
+	`id_user` char(20) not null,
+	`id_bkmark` int not null,
+	PRIMARY KEY(`mark_id`),
+	CONSTRAINT `markcnst`
+	FOREIGN KEY(`id_user`)
+	REFERENCES `users`(`username`)
+	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT `markcnstr`
+	FOREIGN KEY(`id_bkmark`)
+	REFERENCES `bookmark`(`bookmark_id`)
+	ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+create table comments
+(
+	`commnt_id` int not null auto_increment,
+	`comment` mediumtext default '',
+	`person_id` char(20) not null,
+	`bookmrk_id` int not null,
+	PRIMARY KEY(`commnt_id`),
+	CONSTRAINT `cmmcnst`
+	FOREIGN KEY(`person_id`)
+	REFERENCES `users`(`username`)
+	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT `commcnstr`
+	FOREIGN KEY(`bookmrk_id`)
+	REFERENCES `bookmark`(`bookmark_id`)
+	ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+create table contents
+(
+	`content_id` int not null auto_increment,
+	`content` enum('offensive','illegal'),
+	`id_person` char(20) not null,
+	`id_bookmrk` int not null,
+	PRIMARY KEY(`content_id`),
+	CONSTRAINT `cntcnst`
+	FOREIGN KEY(`id_person`)
+	REFERENCES `users`(`username`)
+	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT `cntcnstr`
+	FOREIGN KEY(`id_bookmrk`)
+	REFERENCES `bookmark`(`bookmark_id`)
+	ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+GRANT SELECT,INSERT,UPDATE,DELETE
+ON bookmarks.*
+TO dbauthor identified by 'password'
+
+GRANT SELECT (`username`,`email`,`password`), INSERT(`username`,`email`,`password`), UPDATE(`email`,`password`) 
+ON bookmarks.users 
+TO PUBLIC identified by 'password';
+
+GRANT SELECT, INSERT, UPDATE, DELETE 
+ON bookmarks.bookmark
+TO PUBLIC identified by 'password';
+
+
+GRANT SELECT, INSERT, UPDATE, DELETE 
+ON bookmarks.tags
+TO PUBLIC identified by 'password';
+
+GRANT SELECT, INSERT, UPDATE, DELETE 
+ON bookmarks.marks
+TO PUBLIC identified by 'password';
+
+GRANT SELECT, INSERT, UPDATE, DELETE 
+ON bookmarks.comments
+TO PUBLIC identified by 'password';
+
+GRANT SELECT, INSERT, UPDATE, DELETE 
+ON bookmarks.contents
+TO PUBLIC identified by 'password';
+
+
+GRANT SELECT, INSERT, UPDATE, DELETE 
+ON bookmarks.*
+TO bookmarksauth identified by 'password';
+
+flush privileges;
+
+
+
+
+
+
+
+
+
